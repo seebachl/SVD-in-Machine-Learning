@@ -9,6 +9,7 @@ A1 = rand(m,n)
 
 % find SVD decomposition of A
 [U,Sigma,V] = svd(A1)
+
 %% Find low-rank approximation of A using SVD
 % create random matrix of size 30 x 30 with a given spectrum and find its SVD
 evals = [100000 9000 5000 2000 1500 900 700 300 200 121 25 10 5 2 1 0.945 ...
@@ -16,8 +17,9 @@ evals = [100000 9000 5000 2000 1500 900 700 300 200 121 25 10 5 2 1 0.945 ...
     0.0001]; %d efine the spectrum
 dec_evals = sort(evals,'descend'); % sort the eigenvalues from large to small
 
+% plot the eigenvalues
 fig1 = figure; clf;
-plot(dec_evals,'bo-') % plot the eigenvalues
+plot(dec_evals,'bo-')
 xlabel('Singular Value Position')
 
 Adiag = diag(dec_evals,0); % create a diagonal matrix with eigenvalue entries
@@ -53,6 +55,8 @@ for k = 1:30
     err_list(i) = norm(A-A_best)/norm(A)
 end
 
+% create figure of relative error as a function of the number of singular
+% values used
 fig2 = figure; clf;
 plot(err_list,'bo-')
 xlabel('Number of Singular Values Used') 
@@ -70,19 +74,35 @@ pinvA = pinv(A)
 pinvA*b %solves issue with least squares solution
 
 %% Principal Component Analysis
+% create random m x n matrix
 m=5;
 n=4;
 A = rand(m,n);
-centered_A = zeros(size(A));
+
+% column center matrix
+colcentered_A = zeros(size(A));
 for i = 1:m
     for j = 1:n
-        centered_A(i,j) = A(i,j)-mean(A(:,j))
+        colcentered_A(i,j) = A(i,j)-mean(A(:,j));
     end
 end
 
-coeff = pca(A)
+% find SVD decomposition column centered matrix
+[U,S,V] =svd(colcentered_A)
 
+% PCA of matrix A 
+coeff = pca(A) % note that V = coeff matrix (vectors may differ by a factor of -1)
 
-[U,S,V] =svd(centered_A)
-
-norm(V-coeff,2)
+% PCA by hand 
+% standardize matrix
+centered_A = zeros(size(A));
+for i = 1:m
+    for j = 1:n
+        centered_A(i,j) = (A(i,j)-mean(A(:,j)))/std(A(:,j));
+    end
+end
+covariance = cov(A);
+[V1,D1] = eig(covariance);
+[d, ind] = sort(diag(D1), 'descend');
+Ds = D1(ind,ind);
+Vs = V1(:,ind) % note Vs = V = coeff (may differ by factor of -1)
