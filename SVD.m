@@ -77,7 +77,7 @@ pinvA*b %solves issue with least squares solution
 % create random m x n matrix
 m=5;
 n=4;
-A = rand(m,n);
+A = rand(m,n)
 
 % column center matrix
 colcentered_A = zeros(size(A));
@@ -106,3 +106,7 @@ covariance = cov(A);
 [d, ind] = sort(diag(D1), 'descend');
 Ds = D1(ind,ind);
 Vs = V1(:,ind) % note Vs = V = coeff (may differ by factor of -1)
+
+k = 2;
+feat_vec = coeff(:,1:k)
+reorient = centered_A*feat_vec
