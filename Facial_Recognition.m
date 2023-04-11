@@ -73,5 +73,6 @@ end
 % find the smallest Euclidean distance
 % we use minimum instead of threshold since we know the face belongs to
 % someone in our set
+% the corresponding image (face(i).jpg) is who the system is the image recognizing as
 [~, i] = (min(eps))
-
+sprintf("This is the same person as face%i", i)
