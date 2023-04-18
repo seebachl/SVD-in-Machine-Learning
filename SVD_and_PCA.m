@@ -1,5 +1,5 @@
 %% Finding the singular value decomposition (SVD) of a random m x n matrix
-%  using the building in MATLAB command 
+% using the building in MATLAB command 
 clc
 clear
 
