@@ -68,7 +68,7 @@ fig1 = figure; clf;
 hold on
 
 %plot V for the documents
-scatter(V(:,1)*S(1,1), V(:,2)*S(2,2))
+scatter(V(:,1)*S(1,1), V(:,2)*S(2,2), "filled")
 text(V(:,1)*S(1,1), V(:,2)*S(2,2), labels2,'VerticalAlignment','bottom','HorizontalAlignment','right')
 grid on; axis([-3 1 -3 1])
 title('A Two-Dimensional Plot of Documents')
@@ -147,7 +147,7 @@ for j = 1:size(d1,2)
     end
 end
 
-% adding mapped documents to V_k
+% adding mapped documents to V_k^T
 Vkp = V(:,1:ksigma)';
 for i = 1:size(newterm_doc,2)
     Vkp = [Vkp [newterm_doc(:,i)'*(U(:,1:ksigma))*(inv(S(1:ksigma,1:ksigma)))]'];
