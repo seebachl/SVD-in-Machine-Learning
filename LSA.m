@@ -39,6 +39,7 @@ terms_sort = terms(2:length(terms)); %these are the terms present in our documen
 
 % creating term-document matrix
 % for simplicity, we use raw term-frequency local weighting and no global weighting 
+% if you are familiar with different weighting schemes, try changing this!
 term_doc = zeros(length(terms_sort),size(d,2));
 for j = 1:size(d,2)
      for i = 1:length(terms_sort)    
@@ -51,17 +52,17 @@ for j = 1:size(d,2)
 end
 
 term_doc; % this is our term-document matrix
-%% Performing SVD on the term-document matrix to find the best k-rank approximation
+%% Performing SVD on the term-document matrix to find the best k-rank approximation (latent semantic space)
 [U, S, V] = svd(term_doc);
 
 % Finding the low rank approximation 
 ksigma = 5; % change this value to change the dimension
 latent = zeros(size(term_doc));
 for i = 1:ksigma
-    latent = latent + (S(i,i) * U(:,i) * V(:,i)'); % this is our approximation matrix 
+    latent = latent + (S(i,i) * U(:,i) * V(:,i)'); 
 end
-
-%% Creating a figure for the semantic vector space (ksigma = 2) 
+latent; % this is our approximation matrix 
+%% Creating a figure for the 2-dimensional semantic vector space 
 labels1 = cellstr(num2str([1:length(terms_sort)]'));
 labels2 = ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9", "d10", "d11", "d12", "d13", "d14"];
 fig1 = figure; clf;
@@ -72,7 +73,8 @@ scatter(V(:,1)*S(1,1), V(:,2)*S(2,2), "filled")
 text(V(:,1)*S(1,1), V(:,2)*S(2,2), labels2,'VerticalAlignment','bottom','HorizontalAlignment','right')
 grid on; axis([-3 1 -3 1])
 title('A Two-Dimensional Plot of Documents')
-%% Finding documents based on a query
+%% Deciding which documents to retrieve based on a query
+
 % enter a query vector
 query = ["statistics"];
 % query = ["mathematics" "applications"]; % try this query too!
@@ -95,6 +97,7 @@ for i = 1:14
 end
 
 % find the documents with a cosine similarity larger than 0.9
+% change 0.9 for a different similarity threshold
 L = cos_sim>0.9;
 for i = 1:length(L)
     if L(i) == 1
@@ -102,7 +105,7 @@ for i = 1:length(L)
     end
 end
 
-%% Creating a figure for the semantic vector space with the query (ksigma = 2) 
+%% Creating a figure for the 2-dimensional semantic vector space with the query 
 % compute the query in 2-D
 q2d = q'*(U(:,1:2))*inv(S(1:2,1:2));
 
@@ -117,7 +120,7 @@ text(q2d(1), q2d(2), labels3,'VerticalAlignment','top','HorizontalAlignment','ri
 grid on; axis([-3 1 -3 1])
 title('A Two-Dimensional Plot of Documents with Query')
 
-%% Updating
+%% Updating the database by folding-in third year textbooks
 % we add select third year textbooks
 d15 = ["introduction", "to", "mathematical", "statistics"];
 d16 = ["applied", "statistics", "and", "probability", "for", "engineering"];
@@ -155,6 +158,7 @@ end
 
 mapd15 = newterm_doc(:,1)'*(U(:,1:2))*(inv(S(1:2,1:2)));
 mapd16 = newterm_doc(:,2)'*(U(:,1:2))*(inv(S(1:2,1:2)));
+
 % plot new documents with old
 % notice placement of old documents don't change
 figure
