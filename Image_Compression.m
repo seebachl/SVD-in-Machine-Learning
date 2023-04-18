@@ -110,7 +110,7 @@ set(gca,'fontsize',18)
 set(gcf,'position',0.9*get(0,'ScreenSize'))
 sprintf('Image has size %i x %i x %i = %i entries\n',m,n,p,numel(img))
 
-%% Extract and -erform SVD on each matrix
+%% Extract and perform SVD on each colour matrix
 red = img(:,:,1); % Red matrix
 green = img(:,:,2); % Green matrix
 blue = img(:,:,3); % Blue matrix
@@ -145,8 +145,8 @@ title(sprintf('Singular Values of %s', image_title));
 set(gca,'fontsize',18); 
 grid on;
 set(gcf,'position',0.5*get(0,'ScreenSize'))
-%% Plot compressed images with different numbers of singular values
-ksigma = 100; % edit this number to see how the image appears with different truncations
+%% Plot compressed colour images with different numbers of singular values
+ksigma = 30; % edit this number to see how the image appears with different truncations
 
 % find the approximations of each layer
 red_best = zeros(m,n);
