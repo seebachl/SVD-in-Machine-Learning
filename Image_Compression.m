@@ -1,6 +1,6 @@
 %% How image compression can be used for black and white images
 % import and display image
-% window from Merisha Singh Suwal via kaggle (highest quality) 
+% window from Merisha Singh Suwal via Kaggle (highest quality) 
 % rest of images from Set12 Zhang et al., 2016
 clear
 clc
@@ -34,14 +34,14 @@ elseif strcmp(image_title,'woman')
     img = imread('woman.png');
 end
 % figure(1)
-imshow(img);
+imshow(img)
 [m, n] = size(img);
 t=(sprintf('Original %s Image', image_title)); title(t)
 set(gca,'fontsize',18)
 set(gcf,'position',0.9*get(0,'ScreenSize'))
 sprintf('image has size %i x %i = %i entries\n',size(img,1),size(img,2),numel(img))
 
-%% Find SVD decomposition of image
+%% Find SVD decomposition of image and plot the singular values
 [U,S,V] = svd(double(img));
 
 % Arrange descending singular values
@@ -77,9 +77,9 @@ t = sprintf([image_title sprintf(' image built from %i largest singular values',
 title(t);
 set(gca,'fontsize',18)
 set(gcf,'position',0.9*get(0,'ScreenSize'))
-%% Image Compression for colour images
-%load images
-%images from Afifi et al. 2020
+%% How image compression can be used for colour images
+% load images
+% images from Afifi et al. 2020
 clear
 image_title = 'waterlily'; %change the title to select a different image 
 
@@ -103,17 +103,17 @@ elseif strcmp(image_title,'waterlily')
     img = imread('waterlily.jpg');
 end
 % figure(1)
-imshow(img);
-[m, n, p] = size(img)
+imshow(img)
+[m, n, p] = size(img);
 t=(sprintf('Original %s Image', image_title)); title(t)
 set(gca,'fontsize',18)
 set(gcf,'position',0.9*get(0,'ScreenSize'))
 sprintf('Image has size %i x %i x %i = %i entries\n',m,n,p,numel(img))
 
-%% Perform SVD on each matrix
-red = img(:,:,1); % Red channel
-green = img(:,:,2); % Green channel
-blue = img(:,:,3); % Blue channel
+%% Extract and -erform SVD on each matrix
+red = img(:,:,1); % Red matrix
+green = img(:,:,2); % Green matrix
+blue = img(:,:,3); % Blue matrix
 
 [Ur, Sr, Vr] = svd(double(red));
 [Ug, Sg, Vg] = svd(double(green));
@@ -146,8 +146,9 @@ set(gca,'fontsize',18);
 grid on;
 set(gcf,'position',0.5*get(0,'ScreenSize'))
 %% Plot compressed images with different numbers of singular values
-ksigma = 20; %edit this number to see how the image appears with different truncations
+ksigma = 100; % edit this number to see how the image appears with different truncations
 
+% find the approximations of each layer
 red_best = zeros(m,n);
 for i = 1:ksigma
     red_best = red_best + sigmar(i) * Ur(:,i) * Vr(:,i)';
@@ -161,10 +162,9 @@ for i = 1:ksigma
     blue_best = blue_best + sigmab(i) * Ub(:,i) * Vb(:,i)';
 end
 
-ndata = ksigma + ksigma * 2*size(Ur,1);
 comp_ratio = m*n/(ksigma*(m+n+1))
 
-t = sprintf(' approximation using largest %i singular values and %.1f percent of the original data\n', ksigma, 100*ndata/numel(img));
+t = sprintf(' approximation using largest %i singular values and a compression ratio of %.1f \n', ksigma, comp_ratio);
 fprintf([image_title t]);
 
 rgbImage(:,:,1) = uint8(red_best);
@@ -175,4 +175,3 @@ t = sprintf([image_title sprintf(' image built from %i largest singular values',
 title(t);
 set(gca,'fontsize',18)
 set(gcf,'position',0.9*get(0,'ScreenSize'))
-
