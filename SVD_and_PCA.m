@@ -1,5 +1,5 @@
 %% Finding the singular value decomposition (SVD) of a random m x n matrix
-% using the building in MATLAB command 
+%  using the building in MATLAB command 
 clc
 clear
 
@@ -65,7 +65,7 @@ plot(err_list,'bo-')
 xlabel('Number of Singular Values Used') 
 ylabel('Relative Error of Resulting Approximation Matrix') 
 
-%% Find the pseudo-inverse of A using built-in MATLAB command
+%% Find the Moore-Penrose pseudo-inverse of A using built-in MATLAB command
 % define A as a rank-deficient matrix
 A = [-1 1 0; -1 0 1; 0 -1 1]
 b = [900; -601; 10]
@@ -94,6 +94,7 @@ end
 [~,~,V] =svd(colcentered_A)
 
 % PCA of matrix A using MATLAB command
+% This line requires the Statistics and Machine Learning Toolbox 
 coeff = pca(A) % note that V = coeff matrix (vectors may differ by a factor of -1)
 
 % PCA by hand 
