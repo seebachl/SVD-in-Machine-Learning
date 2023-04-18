@@ -1,7 +1,6 @@
 %% An example of a simple facial recognition algorithm using PCA and eigenfaces 
 % Compress multiple images in a database into one matrix
-% ensure all documents from Celebrity-Images and Test-Images are downloaded
-% on your device
+% ensure all documents from Celebrity-Images and Test-Images are downloaded on your device
 clc
 clear
 
@@ -61,7 +60,7 @@ imshow(mat2gray(reshape(R, 100, 100)))
 imageData = imread('identifyjolie.jpg');
 grayscale = rgb2gray(imageData);
 unknown = grayscale(:);
-imshow(mat2gray(grayscale))
+imshow(mat2gray(grayscale)) % print the image
 
 % Find face space projection of known images 
 % (Similar to Omega_l but there is only one face for each class)
@@ -83,5 +82,3 @@ end
 [~, i] = (min(eps));
 data = [[1:17]; ["Angelina Jolie", "Brad Pitt", "Denzel Washington", "Hugh Jackman", "Jennifer Lawrence", "Johnny Depp", "Kate Winslet", "Leonardo DiCaprio", "Megan Fox", "Natalie Portman", "Nicole Kidman", "Robert Downey Jr.", "Sandra Bullock", "Scarlett Johansson", "Tom Cruise", "Tom Hanks", "Will Smith"]];
 sprintf("This is %s", data(2,i))
-
-
